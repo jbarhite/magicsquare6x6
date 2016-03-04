@@ -2,6 +2,7 @@
 //Swap partitions of 34 into place according to a fast ordering.
 //We use the fact that the corners sum to 34 to fill in the bottom left corner.
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 #include <algorithm>
 using namespace std;
@@ -26,10 +27,10 @@ int d[4];
 //Ouput a magic square
 ostream& operator<<(ostream& out, int v[])
 {
-	out << v[0] << ' ' << v[1] << ' ' << v[2] << ' ' << v[3]  << endl
-		<< v[12]<< ' ' << v[4] << ' ' << v[10] << ' ' << v[13] << endl
-		<< v[14]<< ' ' << v[8] << ' ' << v[5] << ' ' << v[15] << endl
-		<< v[7]<< ' ' << v[9] << ' ' << v[11]<< ' ' << v[6]  << endl << endl;
+	out << setw(3) << v[0] << setw(3) << v[1] << setw(3) << v[2] << setw(3) << v[3] << endl
+		<< setw(3) << v[12] << setw(3) << v[4] << setw(3) << v[10] << setw(3) << v[13] << endl
+		<< setw(3) << v[14] << setw(3) << v[8] << setw(3) << v[5] << setw(3) << v[15] << endl
+		<< setw(3) << v[7] << setw(3) << v[9] << setw(3) << v[11] << setw(3) << v[6]  << endl << endl;
 	return out;
 }
 
