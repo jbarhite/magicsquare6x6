@@ -215,33 +215,37 @@ int do_col4(int v[])
 int do_rows245(int v[])
 {
 	int count = 0;
-	for (int i = 30; i < 31; i++)
-	for (int j = i + 1; j < 32; j++)
-	for (int k = j + 1; k < 33; k++)
-	for (int m = k + 1; m < 34; m++)
+	for (int i = 30; i < 35; i++)
+	for (int j = i + 1; j < 36; j++)
 	if (v[i] + v[1] + v[26] + v[28] + v[7] + v[j] == 105)
-	if (v[k] + v[17] + v[9] + v[3] + v[20] + v[m] == 105)
 	{
-		swap(v[30], v[i]); swap(v[31], v[j]); swap(v[32], v[k]); swap(v[33], v[m]);
-		for (int perm = 0; perm < 2; perm++)
+		swap(v[30], v[i]); swap(v[31], v[j]);
+		for (int k = 32; k < 35; k++)
+		for (int m = k + 1; m < 36; m++)
+		if (v[k] + v[17] + v[9] + v[3] + v[20] + v[m] == 105)
 		{
-			for (int perm2 = 0; perm2 < 2; perm2++)
+			swap(v[32], v[k]); swap(v[33], v[m]);
+			for (int perm = 0; perm < 2; perm++)
 			{
-				for (int perm3 = 0; perm3 < 2; perm3++)
+				for (int perm2 = 0; perm2 < 2; perm2++)
 				{
-					if (v[0] + v[30] + v[12] + v[32] + v[34] + v[11] == 105)
-					if (v[6] + v[31] + v[15] + v[33] + v[35] + v[5] == 105)
+					for (int perm3 = 0; perm3 < 2; perm3++)
 					{
-						count++;
-						cout << v;
+						if (v[0] + v[30] + v[12] + v[32] + v[34] + v[11] == 105)
+						if (v[6] + v[31] + v[15] + v[33] + v[35] + v[5] == 105)
+						{
+							count++;
+							cout << v;
+						}
+						swap(v[34], v[35]);
 					}
-					swap(v[34], v[35]);
+					swap(v[32], v[33]);
 				}
-				swap(v[32], v[33]);
+				swap(v[30], v[31]);
 			}
-			swap(v[30], v[31]);
+			swap(v[33], v[m]); swap(v[32], v[k]);
 		}
-		swap(v[33], v[m]); swap(v[32], v[k]); swap(v[31], v[j]); swap(v[30], v[i]);
+		swap(v[31], v[j]); swap(v[30], v[i]);
 	}
 	return count;
 }

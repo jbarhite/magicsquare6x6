@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <ctime>
 #include <algorithm>
+#include <omp.h>
 using namespace std;
 
 //Order of checks
@@ -14,7 +15,8 @@ int do_row6(int v[]);
 int do_col2(int v[]);
 int do_col5(int v[]);
 int do_rows234(int v[]);
-int do_rest(int v[]);
+
+int cross;
 
 /*Ordering of magic square by array indices
 0  .  .  .  .  6	-  12 13 14 15 -	-  -  -  -  -  -
@@ -44,6 +46,9 @@ int main()
 	int v[36];
 	for (int i = 0; i < 36; i++) v[i] = i;
 
+	cout << "Starting value: ";
+	cin >> cross;
+
 	time_t begin_time = clock(), end_time;
 	int count = do_diag(v, 0);
 	end_time = clock();
@@ -66,7 +71,11 @@ int do_diag(int v[], int s)
 	if (v[i] + v[j] + v[k] + v[m] + v[n] + v[p] == 105)
 	{
 		swap(v[s], v[i]); swap(v[s + 1], v[j]); swap(v[s + 2], v[k]); swap(v[s + 3], v[m]); swap(v[s + 4], v[n]); swap(v[s + 5], v[p]);
-		if (s) return do_row1(v);
+		if (s)
+		{
+			if (cross == 0) return do_row1(v);
+			cross--;
+		}
 		else return do_diag(v, 6);
 		if (s == 0) cout << count << endl;
 		swap(v[s + 5], v[p]); swap(v[s + 4], v[n]); swap(v[s + 3], v[m]); swap(v[s + 2], v[k]); swap(v[s + 1], v[j]); swap(v[s], v[i]);
@@ -188,37 +197,45 @@ int do_col5(int v[])
 int do_rows234(int v[])
 {
 	int count = 0;
-	for (int i = 28; i < 31; i++)
-	for (int j = i + 1; j < 32; j++)
-	for (int k = j + 1; k < 33; k++)
-	for (int m = k + 1; m < 34; m++)
-	for (int n = m + 1; n < 35; n++)
-	for (int p = n + 1; p < 36; p++)
+	for (int i = 28; i < 35; i++)
+	for (int j = i + 1; j < 36; j++)
 	if (v[i] + v[1] + v[16] + v[19] + v[7] + v[j] == 105)
-	if (v[k] + v[24] + v[2] + v[8] + v[26] + v[m] == 105)
-	if (v[n] + v[25] + v[9] + v[3] + v[27] + v[p] == 105)
 	{
-		swap(v[28], v[i]); swap(v[29], v[j]); swap(v[30], v[k]); swap(v[31], v[m]); swap(v[32], v[n]); swap(v[33], v[p]);
-		for (int perm = 0; perm < 2; perm++)
+		swap(v[28], v[i]); swap(v[29], v[j]);
+		for (int k = 30; k < 35; k++)
+		for (int m = k + 1; m < 36; m++)
+		if (v[k] + v[24] + v[2] + v[8] + v[26] + v[m] == 105)
 		{
-			for (int perm2 = 0; perm2 < 2; perm2++)
+			swap(v[30], v[k]); swap(v[31], v[m]);
+			for (int n = 32; n < 35; n++)
+			for (int p = n + 1; p < 36; p++)
+			if (v[n] + v[25] + v[9] + v[3] + v[27] + v[p] == 105)
 			{
-				for (int perm3 = 0; perm3 < 2; perm3++)
+				swap(v[32], v[n]); swap(v[33], v[p]);
+				for (int perm = 0; perm < 2; perm++)
 				{
-					for (int perm4 = 0; perm4 < 2; perm4++)
+					for (int perm2 = 0; perm2 < 2; perm2++)
 					{
-						if (v[0] + v[28] + v[30] + v[32] + v[34] + v[11] == 105)
-						if (v[6] + v[29] + v[31] + v[33] + v[35] + v[5] == 105)
-							count++, cout << v;
-						swap(v[34], v[35]);
+						for (int perm3 = 0; perm3 < 2; perm3++)
+						{
+							for (int perm4 = 0; perm4 < 2; perm4++)
+							{
+								if (v[0] + v[28] + v[30] + v[32] + v[34] + v[11] == 105)
+								if (v[6] + v[29] + v[31] + v[33] + v[35] + v[5] == 105)
+									count++, cout << v;
+								swap(v[34], v[35]);
+							}
+							swap(v[32], v[33]);
+						}
+						swap(v[30], v[31]);
 					}
-					swap(v[32], v[33]);
+					swap(v[28], v[29]);
 				}
-				swap(v[30], v[31]);
+				swap(v[33], v[p]); swap(v[32], v[n]);
 			}
-			swap(v[28], v[29]);
+			swap(v[31], v[m]); swap(v[30], v[k]);
 		}
-		swap(v[33], v[p]); swap(v[32], v[n]); swap(v[31], v[m]); swap(v[30], v[k]); swap(v[29], v[j]); swap(v[28], v[i]);
+		swap(v[29], v[j]); swap(v[28], v[i]);
 	}
 	return count;
 }
